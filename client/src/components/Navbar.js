@@ -23,7 +23,8 @@ function Navbar(props) {
     }, [])
 
     return (
-        <div>
+        <div className="navbar-container">
+            <div className="navbar-wrapper">
             <Link to="/">Home</Link>
             {
                 isUser ? 
@@ -37,6 +38,7 @@ function Navbar(props) {
                     <Link to="/login">Login</Link>
                 </div>
             }
+            </div>
         </div>
     )
 }
