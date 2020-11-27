@@ -1,12 +1,10 @@
 const express = require('express')
 const mongoose = require('mongoose')
-require('dotenv/config')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const authController = require('./controllers/authController')
+require('dotenv/config')
 
-// controller folder
-const UserModel = require('./models/UserModel')
-const jwt = require('jsonwebtoken')
 
 const app = express()
 
@@ -19,10 +17,10 @@ app.use(cors())
 app.use(cookieParser())
 
 //--------------------------------------------------------------
-// DATABASE CONNECTION - MONGO DBNAME is authentication
+// DATABASE CONNECTION - DBNAME is authentication
 //--------------------------------------------------------------
 mongoose.connect(
-    process.env.MONGO_URL,
+    process.env.DB_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -33,73 +31,13 @@ mongoose.connect(
 .catch(error => console.log(error))
 
 //--------------------------------------------------------------
-// ROUTES AND CONTROLLERS
+// ROUTES
 //--------------------------------------------------------------
-app.get('/signup', async (req,res)=>{
-    const data = await UserModel.find()
-    res.json(data)
-})
+app.post('/signup', authController.createUser)
+app.get('/signup', authController.getUsers)
 
-app.get('/requireAuth', (req,res)=>{
-    // const token = req.headers.cookie.split('=')[1]
-    const token = req.cookies.jwt
-    if(token){
-        jwt.verify(token, process.env.ACCESS_TOKEN, (error, decodedToken) => {
-            if (error) return res.sendStatus(403)
-            res.json(decodedToken)
-            console.log('authentication success')
-        })
-    }
-    else {
-        res.sendStatus(401)
-    }
-})
-app.get('/logout', (req, res)=>{
-    res.cookie('jwt', '', { httpOnly:true, maxAge: 1}).send()
-})
+app.get('/logout', authController.logout)
+app.get('/requireAuth', authController.requireAuth)
 
-app.post('/signup', async (req,res)=>{
-    try {
-        const userData = await UserModel.create(req.body)
-        const token = jwt.sign({userId: userData._id}, process.env.ACCESS_TOKEN, {expiresIn: 3 * 24 * 60 * 60})
-        res.cookie('jwt', token, { httpOnly:true, maxAge: 3 * 24 * 60 * 60 * 1000})
-        res.status(201).json({token})
-    } catch (error) {
-        const errors = handleErrors(error)
-        res.status(400).json({message: 'user not created', errors})
-    }
-})
-
-
-app.delete('/deleteMany', (req, res) => {
-    UserModel.deleteMany({}).then((res)=> res.json('success'))
-    .catch(err => res.json(err))
-})
-
-const handleErrors = (error) => {
-    let errors = { email: '', password: '' }
-
-    // duplicate error
-    if(error.code === 11000){
-        errors.email = 'Email already exists'
-        return errors
-    }
-
-    // signup errors
-    if(error.errors.email) {
-        if(error.errors.email.name === 'ValidatorError'){
-            // error message can be customized in UserModel
-            errors.email = error.errors.email.properties.message
-        }
-    }
-
-    if(error.errors.password){
-        if(error.errors.password.name === 'ValidatorError'){
-            // error message can be customized in UserModel
-            errors.password = error.errors.password.properties.message
-        }
-    }
-    
-
-    return errors
-}
+// for dev purposes
+app.delete('/deleteAll', authController.deleteAllUsers)
