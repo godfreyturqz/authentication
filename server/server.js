@@ -18,7 +18,6 @@ app.use(express.urlencoded({extended: true}))
 app.use(cors())
 app.use(cookieParser())
 
-
 //--------------------------------------------------------------
 // DATABASE CONNECTION - DBNAME in MONGO is MyAuth
 //--------------------------------------------------------------

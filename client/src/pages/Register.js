@@ -1,14 +1,10 @@
 import React, {useState} from 'react'
 import axios from "axios";
 import '../App.css'
-import { Link } from 'react-router-dom';
 
 
 function Register(props) {
-    const [user, setUser] = useState({
-        email: '',
-        password: ''
-    })
+    const [user, setUser] = useState({email: '', password: ''})
 
     const handleSubmit = (e)=>{
         e.preventDefault()
@@ -34,15 +30,14 @@ function Register(props) {
 
     return (
         <div className="form-container">
-            <Link to="/profile">profile</Link>
             <div className="form-wrapper">
-                <h2>Create Account</h2>
+                <h2>Create account</h2>
                 <form onSubmit={handleSubmit}>
                     <input placeholder="Email" type="text" value={user.email} name="email" onChange={handleInputs} autoComplete="off"/>
                     <p className="error-message">Email already exists</p>
                     <input placeholder="Password" type="password" value={user.password} name="password" onChange={handleInputs}/>
                     <p className="error-message">Wrong password</p>
-                    <button>Sign Up</button>
+                    <button type="submit">Sign Up</button>
                 </form>
             </div>
         </div>
