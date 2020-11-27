@@ -6,10 +6,10 @@
     box-sizing: border-box;
     font-family: 'Lato', sans-serif;
 }
-body{
-    /* background: #d8ddf8; */
-    /* background: #4055b2; */
-}
+/* body{
+    background: #d8ddf8;
+    background: #4055b2;
+} */
 a{
     text-decoration: none;
     color: #fff;
@@ -34,6 +34,7 @@ a:hover{
 .form-container{
     display: flex;
     justify-content: center;
+    /* for positioning when mounted on app */
     padding-top: 100px;
 }
 

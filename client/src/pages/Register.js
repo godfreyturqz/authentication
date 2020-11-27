@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import axios from "axios";
 import '../App.css'
+import { Link } from 'react-router-dom';
 
 
 function Register(props) {
@@ -14,7 +15,7 @@ function Register(props) {
         axios.post('/signup', user)
         .then(data => {
             // data returns a token
-            console.log(data)
+            // console.log(data)
             if(data){
                 setUser({email: '', password:''})
                 props.history.push('/profile')
@@ -33,6 +34,7 @@ function Register(props) {
 
     return (
         <div className="form-container">
+            <Link to="/profile">profile</Link>
             <div className="form-wrapper">
                 <h2>Create Account</h2>
                 <form onSubmit={handleSubmit}>

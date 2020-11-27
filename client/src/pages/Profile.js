@@ -1,9 +1,10 @@
-import React, { useEffect, useState} from 'react'
+import React, {useContext, useEffect} from 'react'
+import { SessionContext } from "../context";
 import axios from 'axios';
 
-function Profile(props) {
-    const [isUser, setIsUser] = useState(false)
-    
+function Profile() {
+    const [isUser, setIsUser] = useContext(SessionContext)
+
     useEffect( ()=> {
         axios.get('/requireAuth')
         .then(({data}) => {
@@ -11,15 +12,16 @@ function Profile(props) {
             if(data.userId) setIsUser(true) 
         })
         .catch(error => console.log(error))
-    }, [])
-    
+    }, [setIsUser])
 
     return (
         isUser &&
-        <div>
+        <>
             <h1>PROFILE PAGE</h1>
-            <h1>Welcome {isUser}</h1>
-        </div>
+            <h1>Welcome</h1>
+        </>
+        
+        
     )
 }
 

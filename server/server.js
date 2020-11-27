@@ -43,11 +43,11 @@ app.get('/signup', async (req,res)=>{
 app.get('/requireAuth', (req,res)=>{
     // const token = req.headers.cookie.split('=')[1]
     const token = req.cookies.jwt
-    console.log('authentication success')
     if(token){
         jwt.verify(token, process.env.ACCESS_TOKEN, (error, decodedToken) => {
             if (error) return res.sendStatus(403)
             res.json(decodedToken)
+            console.log('authentication success')
         })
     }
     else {
@@ -55,9 +55,7 @@ app.get('/requireAuth', (req,res)=>{
     }
 })
 app.get('/logout', (req, res)=>{
-    console.log('requesting to logout...')
-    res.cookie('jwt', '', { httpOnly:true, maxAge: 1})
-    res.send()
+    res.cookie('jwt', '', { httpOnly:true, maxAge: 1}).send()
 })
 
 app.post('/signup', async (req,res)=>{

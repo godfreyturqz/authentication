@@ -1,26 +1,18 @@
-import React, {useState, useEffect} from 'react'
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import React, {useContext} from 'react'
+import { SessionContext } from "../context";
 import axios from 'axios';
 
 
-function Navbar(props) {
-    const [isUser, setIsUser] = useState(false)
 
-    const handleLogout = (e)=>{
-        e.preventDefault()
+function Navbar() {
+    const [isUser, setIsUser] = useContext(SessionContext)
+
+    const handleLogout = ()=>{
         axios.get('/logout')
-        .then(()=> console.log('logging out..'))
+        .then(() => setIsUser(false))
         .catch(error => console.log(error))
     }
-
-    useEffect( ()=> {
-        axios.get('/requireAuth')
-        .then(({data}) => {
-            // data returns decodedtoken
-            if(data.userId) setIsUser(true) 
-        })
-        .catch(error => console.log(error))
-    }, [])
 
     return (
         <div className="navbar-container">
@@ -30,10 +22,11 @@ function Navbar(props) {
                 isUser ? 
                 <div>
                     <Link to="/profile">Profile</Link>
-                    <a href="/" onClick={handleLogout}>Logout</a>
+                    <Link to="/" onClick={handleLogout}>Logout</Link>
                 </div>
                 :
                 <div>
+                    <Redirect to='/' />
                     <Link to="/register">Register</Link>
                     <Link to="/login">Login</Link>
                 </div>
