@@ -1,13 +1,18 @@
 const UserModel = require('../models/UserModel')
 const jwt = require('jsonwebtoken')
 const utils = require('../utils')
+const bcrypt = require('bcrypt')
 
 
 module.exports.createUser = async (req,res) => {
+    const salt = await bcrypt.genSalt()
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+    const user = { email: req.body.email, password: hashedPassword}
 
     try {
-        const userData = await UserModel.create(req.body)
+        const userData = await UserModel.create(user)
         const token = utils.createToken(userData._id)
+        // add { secure: true } in production
         res.cookie('jwt', token, { httpOnly:true, maxAge: 3 * 24 * 60 * 60 * 1000})
         res.status(201).json({userId: userData._id})
 
