@@ -19,13 +19,14 @@ app.use(cors())
 app.use(cookieParser())
 
 //--------------------------------------------------------------
-// DATABASE CONNECTION - DBNAME in MONGO is MyAuth
+// DATABASE CONNECTION - MONGO DBNAME is authentication
 //--------------------------------------------------------------
 mongoose.connect(
     process.env.MONGO_URL,
     {
         useNewUrlParser: true,
-        useUnifiedTopology: true 
+        useUnifiedTopology: true,
+        useCreateIndex: true
     }   
 )
 .then(() => app.listen(5000, ()=> console.log('connected to server')))
@@ -64,7 +65,8 @@ app.post('/signup', async (req,res)=>{
         res.cookie('jwt', token, { httpOnly:true, maxAge: 3 * 24 * 60 * 60 * 1000})
         res.status(201).json({token})
     } catch (error) {
-        res.status(400).json({message: 'user not created', error})
+        const errors = handleErrors(error)
+        res.status(400).json({message: 'user not created', errors})
     }
 })
 
@@ -73,3 +75,31 @@ app.delete('/deleteMany', (req, res) => {
     UserModel.deleteMany({}).then((res)=> res.json('success'))
     .catch(err => res.json(err))
 })
+
+const handleErrors = (error) => {
+    let errors = { email: '', password: '' }
+
+    // duplicate error
+    if(error.code === 11000){
+        errors.email = 'Email already exists'
+        return errors
+    }
+
+    // signup errors
+    if(error.errors.email) {
+        if(error.errors.email.name === 'ValidatorError'){
+            // error message can be customized in UserModel
+            errors.email = error.errors.email.properties.message
+        }
+    }
+
+    if(error.errors.password){
+        if(error.errors.password.name === 'ValidatorError'){
+            // error message can be customized in UserModel
+            errors.password = error.errors.password.properties.message
+        }
+    }
+    
+
+    return errors
+}
