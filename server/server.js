@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser')
 const authController = require('./controllers/authController')
 require('dotenv/config')
 
-
 const app = express()
 
 //--------------------------------------------------------------
@@ -35,6 +34,7 @@ mongoose.connect(
 //--------------------------------------------------------------
 app.post('/signup', authController.createUser)
 app.get('/signup', authController.getUsers)
+app.post('/login', authController.loginUser)
 
 app.get('/logout', authController.logout)
 app.get('/requireAuth', authController.requireAuth)
