@@ -1,8 +1,7 @@
 import './App.css';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from './pages/Home';
-import Register from './pages/Register';
-import Login from './pages/Login';
+import Authentication from './pages/Authentication';
 import Navbar from './components/Navbar';
 import Profile from './pages/Profile';
 // state management
@@ -32,8 +31,8 @@ function App() {
             <Route path="/profile" component={Profile}/>
           :
           <>
-            <Route path="/register" component={Register}/>
-            <Route path="/login" component={Login}/>
+            <Route path="/register" component={Authentication}/>
+            <Route path="/login" component={Authentication}/>
           </>
         }
       </Switch>
