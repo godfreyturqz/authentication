@@ -8,7 +8,7 @@ import Profile from './pages/Profile';
 // state management
 import React, {useContext, useEffect} from 'react'
 import { SessionContext } from "./context";
-import axios from 'axios';
+import axios from "axios";
 
 function App() {
   const [isUser, setIsUser] = useContext(SessionContext)
@@ -20,7 +20,7 @@ function App() {
         if(data.userId) setIsUser(true) 
     })
     .catch(error => console.log(error))
-  }, [])
+  }, [setIsUser])
 
   return (
     <BrowserRouter>
