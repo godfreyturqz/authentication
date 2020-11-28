@@ -1,4 +1,4 @@
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, {useContext} from 'react'
 import { SessionContext } from "../context";
 import axios from 'axios';
@@ -26,7 +26,6 @@ function Navbar() {
                 </div>
                 :
                 <div>
-                    <Redirect to='/' />
                     <Link to="/register">Register</Link>
                     <Link to="/login">Login</Link>
                 </div>

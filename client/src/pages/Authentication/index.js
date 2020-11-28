@@ -3,7 +3,7 @@ import '../../App.css'
 import Logic from "./logic";
 
 
-function Register(props) {
+function Authentication(props) {
     const {user, handleInputs, handleSubmit, errors, currentUrl} = Logic(props)
     
 
@@ -31,4 +31,4 @@ function Register(props) {
     )
 }
 
-export default Register
+export default Authentication
