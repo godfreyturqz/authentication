@@ -21,5 +21,13 @@ const userSchema = new mongoose.Schema({
     }
 })
 
+// fire a function before save
+userSchema.pre('save', async function (next) {
+    console.log('new user is signing up...', this)
+    const salt = await bcrypt.genSalt()
+    this.password = await bcrypt.hash(this.password, salt)
+    next()
+})
+
 const UserModel = mongoose.model('users', userSchema)
 module.exports = UserModel
