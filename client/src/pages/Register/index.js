@@ -1,32 +1,10 @@
-import React, {useState} from 'react'
-import axios from "axios";
-import '../App.css'
+import React from 'react'
+import '../../App.css'
+import Logic from "./logic";
 
 
-function Register(props) {
-    const [user, setUser] = useState({email: '', password: ''})
-
-    const handleSubmit = (e)=>{
-        e.preventDefault()
-        axios.post('/signup', user)
-        .then(data => {
-            // data returns a token
-            // console.log(data)
-            if(data){
-                setUser({email: '', password:''})
-                props.history.push('/profile')
-            }
-        })
-        .catch(error => console.log(error))     
-    }
-
-    const handleInputs = (e)=>{
-        e.preventDefault()
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
-        })
-    }
+function Register() {
+    const {user, handleInputs, handleSubmit} = Logic()
 
     return (
         <div className="form-container">
