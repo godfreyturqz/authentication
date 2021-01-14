@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken')
 
+//------------------------------------
+// ERROR HANDLER
+//------------------------------------
 module.exports.handleErrors = (error) => {
     let errors = { email: '', password: '' }
 
@@ -26,6 +29,9 @@ module.exports.handleErrors = (error) => {
     return errors
 }
 
+//------------------------------------
+// CREATE TOKENS
+//------------------------------------
 module.exports.createToken = (userId) => {
     return jwt.sign(
         {userId}, 
